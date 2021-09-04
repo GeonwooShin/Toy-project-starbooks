@@ -1,3 +1,13 @@
 <template>
-  <h1>도서 검색 페이지!</h1>
+  <Search />
 </template>
+
+<script>
+import Search from '~/components/Search'
+
+export default {
+  components: {
+    Search
+  }
+}
+</script>

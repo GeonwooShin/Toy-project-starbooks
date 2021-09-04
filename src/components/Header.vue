@@ -1,47 +1,49 @@
 <template>
   <header>
-    <nav class="navbar container">
-      <div class="navbar__logo">
+    <div class="container">
+      <div class="navbar_logo">
         <i class="fas fa-book-reader"></i>
         <Logo />
       </div>
-      <ul class="navbar__menu">
-        <li>
-          <RouterLink
-            to="/"
-            active-class="active"
-            class="nav-link">
-            홈
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink
-            to="/BookSearch"
-            active-class="active"
-            class="nav-link">
-            도서검색
-          </RouterLink>
-        </li> 
-      </ul>
-      <ul class="navbar__menu_nd">
-        <li>
-          <RouterLink
-            to="/Login"
-            active-class="active"
-            class="nav-link">
-            로그인
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink
-            to="/Join"
-            active-class="active"
-            class="nav-link">
-            회원가입
-          </RouterLink>
-        </li> 
-      </ul>
-    </nav>
+      <div class="navbar_nav">
+        <ul class="navbar_menu">
+          <li class="navbar_item">
+            <RouterLink
+              to="/"
+              active-class="active"
+              class="nav-link">
+              홈
+            </RouterLink>
+          </li>
+          <li class="navbar_item">
+            <RouterLink
+              to="/BookSearch"
+              active-class="active"
+              class="nav-link">
+              도서검색
+            </RouterLink>
+          </li>
+        </ul>
+        <ul class="navbar_menu">
+          <li class="navbar_item">
+            <RouterLink
+              to="/Login"
+              active-class="active"
+              class="nav-link">
+              로그인
+            </RouterLink>
+          </li>
+          <li class="navbar_item">
+            <RouterLink
+              to="/Join"
+              active-class="active"
+              class="nav-link">
+              회원가입
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -81,58 +83,41 @@ export default {
 @import "~/scss/main";
 header {
   background-color: $primary;
-  border-bottom: 3.6px solid #808ea2;
-}
-.navbar {
-  font-family: 'Source Sans Pro', sans-serif;
-  display: flex;
-  align-items: center;
-  background-color: $primary;
-  padding: 8px 12px;
-  .navbar__logo {
-    font-size: 24px;
-    justify-content: flex-start;
-    i {
+  padding: 12px 0;
+   border-bottom: 3.6px solid #295899;
+  .container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .fas {
+      padding-right: 8px;
       color: $secondary;
-      margin-right: 10px;
+      font-size: 20px;
     }
-  }
-  .navbar__menu {
-    display: flex;
-    color: $white;
-    font-weight: bold;
-    padding-right: 625px;
-    justify-content: flex-start;
-    margin-bottom: 0;
-    li {
-      padding: 8px 12px;
-      &:hover {
-        background-color: $yellow;
-        border-radius: 4px;
-        transition: .2s;
+    .navbar_nav {
+      display: flex;
+      align-items: center;
+      .navbar_menu {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        .active {
+          font-weight: bold;
+          font-size: 17px;
+        }
+        .nav-link {
+          align-items: center;
+          color: $secondary;
+          border-radius: 4px;
+          &:hover {
+            transition: 0.2;
+            color: $primary;
+            background-color: $yellow;
+            border-radius: 4px;
+          }
+        }
       }
     }
   }
-  .navbar__menu_nd {
-    display: flex;
-    font-weight: bold;
-    justify-content: flex-end;
-    margin-bottom: 0;
-    li {
-      padding: 8px 12px;
-      &:hover {
-        background-color: $yellow;
-        border-radius: 4px;
-        transition: .2s;
-      }
-    }
-  }
-  .nav-link {
-      color: $white;
-      &:hover {
-        color: $primary;
-        transition: .2s;
-      }
-    }
 }
 </style>

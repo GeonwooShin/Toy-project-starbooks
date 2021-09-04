@@ -10,7 +10,7 @@
 @import "~/scss/main";
 .logo {
   font-family: 'Fredoka One', cursive;
-//   font-size: 35px;
+  font-size: 20px;
   color: $yellow;
   text-decoration: none;
 //   position: absolute;
