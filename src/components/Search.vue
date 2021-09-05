@@ -32,7 +32,6 @@ export default {
       } catch (error) {
         console.log(error)
       }
-      // const res = await axios.get('https://13.209.146.204:8080/api/books?page=3&size=1&sort=createdAt')
     }
   }
 }
