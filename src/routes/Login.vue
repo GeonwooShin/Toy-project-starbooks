@@ -55,11 +55,10 @@ export default {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  background: linear-gradient(120deg,#9a8fd3,#2a4365);
   overflow: hidden;
   .signin-container {
     position: absolute;
-    top: 400px;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: $white;
@@ -129,6 +128,7 @@ export default {
         font-weight: 700;
         cursor: pointer;
         outline: none;
+        letter-spacing: 1px;
         &:hover {
           border-color: $primary;
           transition: .5s;
