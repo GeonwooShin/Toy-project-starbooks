@@ -104,7 +104,7 @@ export default {
             font-size: 15px;
             outline: none;
             border-bottom-width: 2px;
-            transition: all .3 ease;
+            transition: all .3s ease;
             &:focus,
             &:valid {
               border-color: $primary;

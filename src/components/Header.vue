@@ -110,7 +110,7 @@ header {
           color: $secondary;
           border-radius: 4px;
           &:hover {
-            transition: 0.2;
+            transition: .2s;
             color: $primary;
             background-color: $yellow;
             border-radius: 4px;
