@@ -112,7 +112,7 @@ export default {
               months.push(j)
             }
             return months          
-          })
+          })()
         },
         {
           name: 'day',
@@ -122,7 +122,7 @@ export default {
               days.push(q)
             }
             return days
-          })
+          })()
         }
       ]
     }
@@ -194,6 +194,13 @@ export default {
           width: 100%;
           align-items: center;
           justify-content: center;
+          select {
+            width: 145px;
+            margin-right: 10px;
+            &:last-child {
+              margin-right: 0;
+            }
+          }
           .details {
             width: 30%;
             justify-content: center;
@@ -207,7 +214,7 @@ export default {
             font-size: 15px;
             outline: none;
             border-bottom-width: 2px;
-            transition: all .3 ease;
+            transition: all .3s ease;
             &:focus,
             &:valid {
               border-color: $primary;
