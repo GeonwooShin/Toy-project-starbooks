@@ -15,23 +15,10 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
   data() {
     return {
-    }
-  },
-  methods: {
-    async apply() {
-      console.log('123123')
-      try {
-        const res = await axios.get( `http://13.209.146.204:8080/api/books?page=3&size=5&sort=createdAt`)
-        console.log(res)
-        
-      } catch (error) {
-        console.log(error)
-      }
     }
   }
 }
@@ -41,7 +28,7 @@ export default {
 .container {
   width: 700px;
   display: flex;
-  padding-top: 40px;
+  padding-top: 70px;
   input {
     margin-right: 10px;  
   }

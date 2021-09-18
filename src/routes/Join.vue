@@ -2,27 +2,33 @@
   <section class="signup">
     <div class="signup-container">
       <h2>회원가입</h2>
-      <form>
+      <form @submit.prevent="submitForm">
         <div class="user-details">
           <div class="input-box">
             <span class="details">아이디</span>
             <input
               type="text"
               placeholder="아이디를 입력하세요"
+              v-model="info.userId"
+              name="userId"
               required />
           </div>
           <div class="input-box">
             <span class="details">비밀번호</span>
             <input
-              type="text"
+              type="password"
               placeholder="비밀번호를 입력하세요"
+              v-model="info.password"
+              name="password"
               required />
           </div>
           <div class="input-box">
             <span class="details">비밀번호 확인</span>
             <input
-              type="text"
+              type="password"
               placeholder="비밀번호를 확인하세요"
+              v-model="info.passwordConfirm"
+              name="passwordConfirm"
               required />
           </div>
           <div class="input-box">
@@ -30,6 +36,40 @@
             <input
               type="text"
               placeholder="이름을 입력하세요"
+              v-model="info.userName"
+              name="userName"
+              required />
+          </div>
+          <div class="input-box">
+            <span class="details">생년월일</span>
+            <select
+              v-for="filter in filters"
+              v-model="$data[filter.name]"
+              :key="filter.name"
+              class="form-select">
+              <option
+                v-for="item in filter.items"
+                :key="item">
+                {{ item }}
+              </option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">전화번호</span>
+            <input
+              type="text"
+              placeholder="전화번호를 입력하세요"
+              v-model="info.phoneNumber"
+              name="phoneNumber"
+              required />
+          </div>
+          <div class="input-box">
+            <span class="details">이메일</span>
+            <input
+              type="email"
+              placeholder="이메일을 입력하세요"
+              v-model="info.email"
+              name="email"
               required />
           </div>
         </div>
@@ -44,8 +84,71 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  
+  data() {
+    return {
+      year: '',
+      month: '',
+      day: '',
+      emails: '',
+      filters: [
+        {
+          name: 'year',
+          items: (() => {
+            const years = []
+            const thisYear = new Date().getFullYear()
+            for(let i = thisYear; i >= 1960; i -= 1) {
+              years.push(i)
+            }
+            return years
+          })()
+        },
+        {
+          name: 'month',
+          items: (() => {
+            const months = []
+            for(let j = 1; j <= 12; j += 1 ) {
+              months.push(j)
+            }
+            return months          
+          })
+        },
+        {
+          name: 'day',
+          items: (() => {
+            const days = []
+            for(let q = 1; q <= 31; q += 1) {
+              days.push(q)
+            }
+            return days
+          })
+        }
+      ]
+    }
+  },
+  methods: {
+    async submitForm() {
+      console.log(this.$store.state)
+      this.$store.dispatch('signup/addUsers', {
+        userId: this.$store.state.userId,
+        password: this.$store.state.password,
+        passwordConfirm: this.$store.state.passwordConfirm,
+        userName: this.$store.state.userName,
+        birthDate: this.$store.state.birthDate,
+        phoneNumber: this.$store.state.phoneNumber,
+        email: this.$store.state.email
+      })
+      alert('회원가입이 완료되었습니다. 새로운 환경에서 로그인 해주세요.')
+      this.$store.commit('signup/resetRegistration')
+      this.$router.push('/')
+    }
+  },
+  computed: {
+    ...mapState('signup',{
+      info: 'Userinfo'
+    })
+  }
 }
 </script>
 

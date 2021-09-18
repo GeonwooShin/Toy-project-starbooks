@@ -1,13 +1,16 @@
 <template>
-  <Search />
+  <BookList />
+  <Pagination />
 </template>
 
 <script>
-import Search from '~/components/Search'
+import BookList from '~/components/BookList'
+import Pagination from '~/components/Pagination.vue'
 
 export default {
   components: {
-    Search
+    BookList,
+    Pagination
   }
 }
 </script>
