@@ -66,9 +66,9 @@ export default {
 @import "~/scss/main";
 footer {
   width: 100%;
-  height: 180px;
+  // height: 180px;
   bottom: 0;
-  position: fixed;
+  // position: fixed;
   margin-top: 12px;
   background-color: $primary;
   padding: 12px 0px;

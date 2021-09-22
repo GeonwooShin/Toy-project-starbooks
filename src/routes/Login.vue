@@ -1,5 +1,5 @@
 <template>
-  <section class="signin">
+  <div class="signin">
     <div class="signin-container">
       <h2>스타북스에 오신 것을 환영합니다!</h2>
       <form>
@@ -31,7 +31,7 @@
         </div>
       </form>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -52,6 +52,7 @@ export default {
 <style lang="scss" scoped>
 @import "~/scss/main";
 .signin {
+  height: 860px;
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;

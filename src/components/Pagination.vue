@@ -44,6 +44,7 @@ export default {
         size: 20
       })
       this.selectedPage = page
+      window.scrollTo(0,0)
     }
   }
 }
@@ -56,6 +57,9 @@ export default {
   nav {
     .pagination {
       justify-content: center;
+      .page-item {
+        cursor: pointer;
+      }
       a {
         font-weight: 600;
       }

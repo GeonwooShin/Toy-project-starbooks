@@ -1,54 +1,94 @@
 <template>
-  <section class="signup">
+  <div class="signup">
     <div class="signup-container">
       <h2>회원가입</h2>
-      <form @submit.prevent="submitForm">
+      <Form @submit.prevent="submitForm">
         <div class="user-details">
           <div class="input-box">
             <span class="details">아이디</span>
-            <input
-              type="text"
-              placeholder="아이디를 입력하세요"
-              v-model="info.userId"
-              name="userId"
-              required />
+            <div class="validate-box">
+              <Field
+                :rules="validateId"
+                type="text"
+                placeholder="아이디를 입력하세요"
+                v-model="info.userId"
+                name="userId"
+                required />
+              <ErrorMessage
+                class="error-box"
+                name="userId" />
+            </div>
           </div>
           <div class="input-box">
             <span class="details">비밀번호</span>
-            <input
-              type="password"
-              placeholder="비밀번호를 입력하세요"
-              v-model="info.password"
-              name="password"
-              required />
+            <div class="validate-box">
+              <Field
+                :rules="validatePassword"
+                type="password"
+                placeholder="비밀번호를 입력하세요"
+                v-model="info.password"
+                name="password"
+                required />
+              <ErrorMessage
+                class="error-box"
+                name="password" />
+            </div>
           </div>
           <div class="input-box">
             <span class="details">비밀번호 확인</span>
-            <input
-              type="password"
-              placeholder="비밀번호를 확인하세요"
-              v-model="info.passwordConfirm"
-              name="passwordConfirm"
-              required />
+            <div class="validate-box">
+              <Field
+                :rules="validatePasswordConfirm"
+                type="password"
+                placeholder="비밀번호를 확인하세요"
+                v-model="info.passwordConfirm"
+                name="passwordConfirm"
+                required />
+              <ErrorMessage
+                class="error-box"
+                name="passwordConfirm" />
+            </div>
           </div>
           <div class="input-box">
             <span class="details">이름</span>
-            <input
-              type="text"
-              placeholder="이름을 입력하세요"
-              v-model="info.userName"
-              name="userName"
-              required />
+            <div class="validate-box">
+              <Field
+                :rules="validateName"
+                type="text"
+                placeholder="이름을 입력하세요"
+                v-model="info.userName"
+                name="userName"
+                required />
+              <ErrorMessage
+                class="error-box"
+                name="userName" />
+            </div>
           </div>
           <div class="input-box">
             <span class="details">생년월일</span>
             <select
-              v-for="filter in filters"
-              v-model="$data[filter.name]"
-              :key="filter.name"
+              v-model="info.year"
               class="form-select">
               <option
-                v-for="item in filter.items"
+                v-for="item in filters[0].items"
+                :key="item">
+                {{ item }}
+              </option>
+            </select>
+            <select
+              v-model="info.month"
+              class="form-select">
+              <option
+                v-for="item in filters[1].items"
+                :key="item">
+                {{ item }}
+              </option>
+            </select>
+            <select
+              v-model="info.day"
+              class="form-select">
+              <option
+                v-for="item in filters[2].items"
                 :key="item">
                 {{ item }}
               </option>
@@ -56,21 +96,33 @@
           </div>
           <div class="input-box">
             <span class="details">전화번호</span>
-            <input
-              type="text"
-              placeholder="전화번호를 입력하세요"
-              v-model="info.phoneNumber"
-              name="phoneNumber"
-              required />
+            <div class="validate-box">
+              <Field
+                :rules="validatePhoneNumber"
+                type="text"
+                placeholder="하이픈(-)없이 입력"
+                v-model="info.phoneNumber"
+                name="phoneNumber"
+                required />
+              <ErrorMessage
+                class="error-box"
+                name="phoneNumber" />
+            </div>
           </div>
           <div class="input-box">
             <span class="details">이메일</span>
-            <input
-              type="email"
-              placeholder="이메일을 입력하세요"
-              v-model="info.email"
-              name="email"
-              required />
+            <div class="validate-box">
+              <Field
+                :rules="validateEmail"
+                type="email"
+                placeholder="이메일을 입력하세요"
+                v-model="info.email"
+                name="email"
+                required />
+              <ErrorMessage
+                class="error-box"
+                name="email" />
+            </div>
           </div>
         </div>
         <div class="button">
@@ -80,13 +132,20 @@
         </div>
       </form>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { Field, Form, ErrorMessage } from 'vee-validate';
 export default {
+  components: {
+    Field,
+    Form,
+    ErrorMessage
+  },
   data() {
+
     return {
       year: '',
       month: '',
@@ -98,7 +157,7 @@ export default {
           items: (() => {
             const years = []
             const thisYear = new Date().getFullYear()
-            for(let i = thisYear; i >= 1960; i -= 1) {
+            for(let i = thisYear; i >= 1940; i -= 1) {
               years.push(i)
             }
             return years
@@ -129,6 +188,7 @@ export default {
   },
   methods: {
     async submitForm() {
+      this.$store.commit('signup/birthChecking')
       console.log(this.$store.state)
       this.$store.dispatch('signup/addUsers', {
         userId: this.$store.state.userId,
@@ -142,7 +202,66 @@ export default {
       alert('회원가입이 완료되었습니다. 새로운 환경에서 로그인 해주세요.')
       this.$store.commit('signup/resetRegistration')
       this.$router.push('/')
-    }
+    },
+    validateId(value) {
+      if(!value) {
+        return '* 필수 입력 사항입니다.'
+      }
+      if(!/^[a-z0-9]{5,20}$/i.test(value)) {
+        return '5~20자의 영문 소문자, 숫자만 사용 가능합니다'
+      }
+      return true
+    },
+    validatePassword(value) {
+      if(!value) {
+        return '* 필수 입력 사항입니다.'
+      }
+      if(!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,15}$/i.test(value)) {
+        return '5~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요.'
+      }
+      return true
+    },
+    validatePasswordConfirm(value) {
+      if(!value) {
+        return '* 필수 입력 사항입니다.'
+      }
+      if( this.info.password != this.info.passwordConfirm ) {
+        return '비밀번호가 일치하지 않습니다.'
+      }
+      return true
+    },
+    validateName(value) {
+      if(!value) {
+        return '* 필수 입력 사항입니다.'
+      }
+      if(!/^[가-힣A-Za-z]+$/i.test(value)) {
+        return '실명을 입력해주세요.'
+      }
+      return true
+    },
+    validatePhoneNumber(value) {
+      if(!value) {
+        return '* 필수 입력 사항입니다.'
+      }
+      if(!/^01{1}[016789]{1}[0-9]{7,8}$/i.test(value)) {
+        return '정확히 입력해 주세요.'
+      }
+      return true
+    },
+    validateEmail(value) {
+      // if the field is empty
+      if (!value) {
+        return '* 필수 입력 사항입니다.'
+      }
+
+      // if the field is not a valid email
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+        return '이메일 형식이 아닙니다.'
+      }
+
+      // All is good
+      return true
+    },
   },
   computed: {
     ...mapState('signup',{
@@ -155,12 +274,13 @@ export default {
 <style lang="scss" scoped>
 @import "~/scss/main";
 .signup {
+  height: 900px;
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
   .signup-container {
     position: absolute;
-    top: 48%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: $white;
@@ -190,13 +310,26 @@ export default {
         .input-box {
           display: flex;
           padding: 30px 0;
-          height: 55px;
+          height: 75px;
           width: 100%;
           align-items: center;
           justify-content: center;
-          select {
+          .validate-box {
+            width: 100%;
+            .error-box {
+              font-size: 12px;
+              color: red;
+            }
+          }
+          .form-select {
             width: 145px;
             margin-right: 10px;
+            border: 1px solid #adadad;
+            border-bottom-width: 2px;
+            &:hover {
+              border-color: $primary;
+              transition: .5s;
+            }
             &:last-child {
               margin-right: 0;
             }
@@ -207,7 +340,7 @@ export default {
           }
           input {
             width: 100%;
-            height: 45px;
+            height: 40px;
             border-radius: 3px;
             border: 1px solid #adadad;
             padding-left: 10px;
