@@ -4,7 +4,7 @@ module.exports = {
   },
   devServer: {
     proxy: 'http://13.209.146.204:8080' 
-}
+  }
 };
 // module.exports = {
 //   chainWebpack: config => {

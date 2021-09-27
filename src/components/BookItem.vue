@@ -1,24 +1,28 @@
 <template>
-  <div class="book-container">
-    <div
-      :style="{backgroundImage: `url(${requestDiffSizeImage(book.imgUrl)})`}"
-      class="book">
-    </div>
-    <div class="info">
-      <div class="title">
-        {{ book.title }}
+  <RouterLink
+    :to="`/DetailedBook/${book.id}`"
+    class="book-zone">
+    <div class="book-container">
+      <div
+        :style="{backgroundImage: `url(${requestDiffSizeImage(book.imgUrl)})`}"
+        class="book">
       </div>
-      <div class="author">
-        {{ book.author }}
+      <div class="info">
+        <div class="title">
+          {{ book.title }}
+        </div>
+        <div class="author">
+          {{ book.author }}
+        </div>
+        <div class="publisher">
+          {{ book.publisher }}
+        </div>
+        <div class="price">
+          {{ book.price }}<span>원</span>
+        </div>
       </div>
-      <div class="publisher">
-        {{ book.publisher }}
-      </div>
-      <div class="price">
-        {{ book.price }}<span>원</span>
-      </div>
-    </div>
-  </div> 
+    </div> 
+  </RouterLink>
 </template>
 
 <script>
@@ -39,6 +43,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/scss/main";
+.book-zone {
+  text-decoration: none;
+}
 .book-container {
   width: 200px;
   .book {

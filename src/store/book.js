@@ -7,7 +7,8 @@ export default {
   // state에 정의된 변수는 vue 컴포넌트에서 computed 속성을 이용하여 변경사항 추적가능
   state: () => ({
     books: [],
-    totalpage: []
+    totalpage: [],
+    theBook: {}
   }),
   getters: {},
   // state에 정의된 변수를 변경하도록 하는 역할, 동기처리로써 state에 정의된 변경사항을 추적할 수 있게한다.
@@ -22,9 +23,9 @@ export default {
   actions: {
     async searchBooks({ commit }, payload) {
       console.log('123123')
-      const { page, size } = payload
-
-      const res = await axios.get( `http://13.209.146.204:8080/api/books?page=${page}&size=${size}&sort=createdAt`)
+      const res = await _fetchBooks({
+        ...payload
+      })
       console.log(res)
       const { content, totalElements, totalPages } = res.data
       commit('updateState', {
@@ -35,6 +36,39 @@ export default {
       console.log(typeof totalElements) // number
       console.log(totalPages)// 16
       console.log(typeof totalPages)// number
+    },
+    async searchBookWithId({ commit }, payload) {
+      commit('updateState', {
+        theBook: {}
+      })
+      try {
+        const res = await _fetchBooks(payload)
+        console.log(res)
+        commit('updateState', {
+          theBook: res.data
+        })
+      } catch(error) {
+        commit('updateState', {
+          theBook: {}
+        })
+      }
     }
   }
+}
+
+function _fetchBooks(payload) {
+  const { page, size, id } = payload
+  const url = id
+  ? `http://13.209.146.204:8080/api/books/${id}` 
+  : `http://13.209.146.204:8080/api/books?page=${page}&size=${size}&sort=createdAt`
+
+  return new Promise((resolve, reject) => {
+    axios.get(url)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err.message)
+      })
+  })
 }

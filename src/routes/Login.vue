@@ -2,10 +2,12 @@
   <div class="signin">
     <div class="signin-container">
       <h2>스타북스에 오신 것을 환영합니다!</h2>
-      <form>
+      <form @submit.prevent="userLogin">
         <div class="txt_field">
           <input
             type="text"
+            name="loginid"
+            v-model="userObj.id"
             required />
           <span></span>
           <label>ID</label>
@@ -13,6 +15,8 @@
         <div class="txt_field">
           <input
             type="password"
+            name="loginpw"
+            v-model="userObj.password"
             required />
           <span></span>
           <label>Password</label>
@@ -35,6 +39,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -45,6 +50,20 @@ export default {
         } 
       ]
     }
+  },
+  methods: {
+    async userLogin() {
+      this.$store.dispatch('loginService/login', {
+        id: this.$store.state.id,
+        password: this.$store.state.password
+      })
+      this.$router.replace('/')
+    }
+  },
+  computed: {
+    ...mapState('loginService', {
+      userObj: 'UserInfoObj'
+    })
   }
 }
 </script>

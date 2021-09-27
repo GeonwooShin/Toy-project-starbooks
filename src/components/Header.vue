@@ -27,14 +27,24 @@
         <ul class="navbar_menu">
           <li class="navbar_item">
             <RouterLink
+              v-if="$store.state.isLogin === false"
               to="/Login"
               active-class="active"
               class="nav-link">
               로그인
             </RouterLink>
+            <button
+              v-else
+              type="button"
+              @click="UserLogout"
+              active-class="active"
+              class="nav-link btn btn-primary btn-sm">
+              로그아웃
+            </button>
           </li>
           <li class="navbar_item">
             <RouterLink
+              v-if="$store.state.isLogin === false"
               to="/Join"
               active-class="active"
               class="nav-link">
@@ -74,6 +84,11 @@ export default {
           href: '/Join'
         }               
       ]
+    }
+  },
+  methods: {
+    UserLogout() {
+      this.$store.commit('loginService/logout')
     }
   }
 }

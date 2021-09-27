@@ -3,6 +3,7 @@ import Home from '~/routes/Home'
 import Login from '~/routes/Login'
 import Join from '~/routes/Join'
 import BookSearch from '~/routes/BookSearch'
+import DetailedBook from '~/routes/DetailedBook'
 
 export default createRouter({
   // hash, history
@@ -15,6 +16,10 @@ export default createRouter({
     {
       path: '/BookSearch',
       component: BookSearch
+    },
+    {
+      path: '/DetailedBook/:id',
+      component: DetailedBook
     },
     {
       path: '/Login',
