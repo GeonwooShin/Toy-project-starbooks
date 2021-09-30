@@ -57,7 +57,9 @@ export default {
         id: this.$store.state.id,
         password: this.$store.state.password
       })
-      this.$router.replace('/')
+      .then(() => {
+        this.$router.push('/')
+      })
     }
   },
   computed: {

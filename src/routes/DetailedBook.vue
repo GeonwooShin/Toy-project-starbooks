@@ -24,14 +24,14 @@
       </div>
     </div>
   </div>
-  <Comment />
+  <CommentBox />
 </template>
 
 <script>
-import Comment from '~/components/Comment'
+import CommentBox from '~/components/CommentBox'
 export default {
   components: {
-    Comment
+    CommentBox
   },
   computed: {
     theBook() {

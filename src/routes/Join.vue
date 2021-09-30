@@ -16,7 +16,7 @@
                 name="userId"
                 required />
               <ErrorMessage
-                class="error-box"
+                :class="[validateIdResult === true? 'noerror-box' : 'error-box']"
                 name="userId" />
             </div>
           </div>
@@ -71,7 +71,7 @@
           <div class="input-box">
             <span class="details">생년월일</span>
             <select
-              v-model="info.year"
+              v-model="this.$store.state.signup.year"
               class="form-select">
               <option
                 v-for="item in filters[0].items"
@@ -80,7 +80,7 @@
               </option>
             </select>
             <select
-              v-model="info.month"
+              v-model="this.$store.state.signup.month"
               class="form-select">
               <option
                 v-for="item in filters[1].items"
@@ -89,7 +89,7 @@
               </option>
             </select>
             <select
-              v-model="info.day"
+              v-model="this.$store.state.signup.day"
               class="form-select">
               <option
                 v-for="item in filters[2].items"
@@ -144,7 +144,6 @@
 <script>
 import { mapState } from 'vuex'
 import { Field, Form, ErrorMessage } from 'vee-validate';
-import axios from 'axios'
 export default {
   components: {
     Field,
@@ -152,7 +151,6 @@ export default {
     ErrorMessage
   },
   data() {
-
     return {
       year: '',
       month: '',
@@ -220,20 +218,16 @@ export default {
         this.validateIdResult = false
         return '5~20자의 영문 소문자, 숫자만 사용 가능합니다'
       }
-      return axios.get(`http://13.209.146.204:8080/api/check/${value}`)
-      .then((res) => {
-        console.log(value)
-        let statusCode = res.data.code
-        if(statusCode === "E0008") {
-          console.log(res)
-          this.validateIdResult = true
-          return '사용가능한 아이디 입니다.'
-        }else if(statusCode === "E0009") {
-          console.log(res)
-          this.validateIdResult = false
-          return '이미 존재하는 아이디 입니다.'
-        }
+      this.$store.dispatch('signup/idChecking', {
+        userId: this.info.userId
       })
+      if(this.$store.state.signup.idcheck === true) {
+        this.validateIdResult = true
+        return '사용가능한 아이디 입니다.'
+      } else {
+        this.validateIdResult = false
+        return '이미 사용중인 아이디 입니다.'
+      }
     },
     validatePassword(value) {
       if(!value) {
@@ -289,13 +283,11 @@ export default {
         this.validateEmailResult = false
         return '* 필수 입력 사항입니다.'
       }
-
       // if the field is not a valid email
       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
         this.validateEmailResult = false
         return '이메일 형식이 아닙니다.'
       }
-
       // All is good
       this.validateEmailResult = true
       return true
@@ -315,11 +307,6 @@ export default {
       alert('회원가입이 완료되었습니다. 새로운 환경에서 로그인 해주세요.')
       this.$store.commit('signup/resetRegistration')
       this.$router.push('/')
-    },
-    async idCheck() {
-      this.$store.dispatch('signup/idChecking', {
-        userId: this.info.userId
-      })
     }
   },
   computed: {
@@ -375,11 +362,12 @@ export default {
           justify-content: center;
           .validate-box {
             width: 100%;
-            .bad-validate {
-              border: 1px solid red;
-            }
             .good-validate {
               border: 1px solid $primary;
+            }
+            .noerror-box {
+              font-size: 12px;
+              color: $primary;
             }
             .error-box {
               font-size: 12px;
@@ -393,7 +381,6 @@ export default {
             border-bottom-width: 2px;
             &:hover {
               border-color: $primary;
-              transition: .5s;
             }
             &:last-child {
               margin-right: 0;

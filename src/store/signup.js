@@ -10,11 +10,12 @@ export default {
       userName: '',
       birthDate: '',
       phoneNumber: '',
-      email: '',
-      year: '',
-      month: '',
-      day: ''
-    }
+      email: ''
+    },
+    year: '',
+    month: '',
+    day: '',
+    idCheck: true
   },
   getters: {},
   mutations: {
@@ -40,7 +41,7 @@ export default {
       }
     },
     birthChecking(state) {
-      const date = `${state.Userinfo.year}` + `${state.Userinfo.month}`.padStart(2, '0') + `${state.Userinfo.day}`.padStart(2, '0')
+      const date = `${state.year}` + `${state.month}`.padStart(2, '0') + `${state.day}`.padStart(2, '0')
       state.Userinfo = {...state.Userinfo, birthDate: date }
     },
     idChecking(state, payload) {
@@ -51,9 +52,9 @@ export default {
         console.log(res)
         let statusCode = res.data.code
         if(statusCode === "E0008") {
-          alert('사용가능한 아이디 입니다.')
+          state.idcheck = true
         }else if(statusCode === "E0009") {
-          alert('이미 존재하는 아이디 입니다.')
+          state.idcheck = false
         }
       })
     }
