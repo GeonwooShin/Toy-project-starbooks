@@ -6,32 +6,32 @@
           <div class="commentArea">
             <div class="commentAreaTop">
               <div class="commentUser">
-                {{ comment.userId }}
+                {{ userComment.userId }}
               </div>
               <div class="commentRating">
-                {{ comment.starRate }}
+                {{ userComment.starRate }}
               </div>
             </div>
             <div
               class="commentText"
               v-if="edit">
-              {{ comment.comment }}
+              {{ userComment.comment }}
             </div>
             <div
               v-else
               class="commentFixArea">
               <textarea
                 class="commentFixBox"
-                v-model="comment.comment"></textarea>
+                v-model="userComment.comment"></textarea>
             </div>
             <div
-              v-if=" comment.userId === this.$store.state.loginService.UserInfoObj.id && edit"
+              v-if=" userComment.userId === this.$store.state.loginService.UserInfoObj.id && edit"
               class="commentMethods">
               <div class="commentFix">
                 <span @click="changeEdit">수정</span>
               </div>
               <div class="commentDelete">
-                <span>삭제</span>
+                <span @click="commentDelete">삭제</span>
               </div>
             </div>
             <div
@@ -55,8 +55,14 @@
 export default {
   data() {
     return {
-      edit: true
+      edit: true,
+      userComment: [
+
+      ]
     }
+  },
+  created() {
+    this.userComment = this.comment
   },
   props: {
     comment: {
@@ -69,14 +75,19 @@ export default {
       this.edit = false
     },
     async commentFix() {
-      console.log(this.$store.state.commentList)
-      const getCommentId = this.$store.state.commentList.filter(function (commentList) {return commentList.userId == this.$store.state.loginService.UserInfoObj.id})
-      console.log(getCommentId)
       this.$store.dispatch('commentService/fixComment', {
         id: this.$route.params.id,
-        commentId: getCommentId[0].commentId,
-        comment: this.$store.state.comment,
-        starRate: this.$store.state.starRate
+        commentId: this.comment.commentId,
+        comment: this.comment.comment,
+        starRate: this.comment.starRate
+      })
+      this.edit = true
+      console.log(this.edit)
+    },
+    async commentDelete() {
+      this.$store.commit('commentService/deleteComment', {
+        id: this.$route.params.id,
+        commentId: this.comment.commentId
       })
     }
   }

@@ -127,6 +127,10 @@ export default {
   },
   methods: {
     async newComment() {
+      if(this.$store.state.loginService.UserInfoObj.id === '') {
+        alert('로그인 후 이용할 수 있습니다.')
+        return
+      }
       this.$store.dispatch('commentService/postComment', {
         id: this.$route.params.id,
         comment: this.$store.state.comment,
