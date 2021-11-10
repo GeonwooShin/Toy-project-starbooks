@@ -100,7 +100,6 @@ export default {
   width: 100%;
   .commentListWrapper {
     border-top: 1px solid #ebebeb;
-    width: 80%;
     margin-left: 65px;
     .commentBoxWrapper {
       .comments {

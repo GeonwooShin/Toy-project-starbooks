@@ -6,6 +6,7 @@ export default {
     comment:'',
     starRate: '',
     commentList: [],
+    likedList: [] 
   }),
   getters: {
 
@@ -23,10 +24,14 @@ export default {
       })
       .then((res) => {
         console.log(res)
+        this.state.comment = ''
+        this.state.starRate = ''
       })
       .catch((err) => {
         alert('댓글은 한 책당 한 번만 작성할 수 있습니다.')
         console.log(err)
+        this.state.comment = ''
+        this.state.starRate = ''
       })
       console.log(state.comment)
       console.log(state.starRate)
@@ -62,6 +67,39 @@ export default {
         console.log(err)
       })
     },
+    postHeart(state, payload) {
+      const {id} = payload
+      axios.post(`http://13.209.146.204:8080/api/books/${id}/heart`, {
+        check: true,
+        heartCount: 1
+      }, {
+        headers: {
+          Authorization: `Bearer ` + localStorage.getItem('user-token')
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        console.log(state.likedList)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    deleteHeart(state, payload) {
+      const {id} = payload
+      axios.delete(`http://13.209.146.204:8080/api/books/${id}/heart`, {
+        headers: {
+          Authorization: `Bearer ` + localStorage.getItem('user-token')
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        console.log(state.likedList)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
     commentUpdate(state, payload) {
       Object.keys(payload).forEach(key => {
         state[key] = payload[key]
@@ -69,12 +107,6 @@ export default {
     }
   },
   actions: {
-    async postComment({ commit }, payload) {
-      return await commit('postComment', payload)
-    },
-    async fixComment({commit}, payload) {
-      return await commit('fixComment', payload)
-    },
     async getComment({commit}, payload) {
       const {id} = payload
       axios.get(`http://13.209.146.204:8080/api/books/${id}/comments`)
@@ -91,6 +123,39 @@ export default {
           commentList: {}
         })
       })
+    },
+    async getHeart({commit}, payload) {
+      const {id} = payload
+      axios.get(`http://13.209.146.204:8080/api/books/${id}/heart`, {
+        headers: {
+          Authorization: `Bearer ` + localStorage.getItem('user-token')
+        }
+      })
+      .then(res => {
+        console.log(res)
+        const { map } = res.data
+        commit('commentUpdate', {
+          likedList: map
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        commit('commentUpdate', {
+          likedList: {}
+        })
+      })
+    },
+    async postComment({ commit }, payload) {
+      return await commit('postComment', payload)
+    },
+    async fixComment({commit}, payload) {
+      return await commit('fixComment', payload)
+    },
+    async postHeart({ commit }, payload) {
+      return await commit('postHeart', payload)
+    },
+    async deleteHeart({ commit }, payload) {
+      return await commit('deleteHeart', payload)
     }
   }
 }

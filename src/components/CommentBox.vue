@@ -1,24 +1,9 @@
 <template>
   <div class="Reviews container">
     <div class="ReviewsHeader">
-      <div class="ReviewsHeaderLeft">
-        <div class="HeartForm">
-          <p>마음에 드신다면 하트를 눌러 찜해보세요!</p>
-          <div class="HeartInput">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckIndeterminate" />
-            <label
-              class="form-check-label fas fa-heart"
-              for="flexCheckIndeterminate"></label>
-          </div>
-        </div>
-      </div>
       <div class="ReviewsHeaderRight">
         <div class="starRatingForm">
-          <div class="starRating">
+          <div class="starRating fillLeft">
             <div class="starRatingInput">
               <input
                 value="5"
@@ -151,59 +136,23 @@ export default {
 <style lang="scss" scoped>
 @import '~/scss/main';
 .container {
-  margin: 0 120.5px;
-  padding: 0 12px;
+  // margin: 0 120.5px;
+  // padding: 0 12px;
   .ReviewsHeader {
     display: flex;
     width: 100%;
     border-top: solid 1px #ebebeb;
     padding: 40px 0;
-    .ReviewsHeaderLeft {
-      padding-left: 18px;
-      width: 20%;
-      .HeartForm {
-      justify-content: center;
-      align-items: center;
-      padding-top: 100px;
-        p {
-        padding-top: 10px;
-        font-size: 12px;
-        text-align: center;
-        }
-        .HeartInput { 
-          justify-content: center;
-          text-align: center;
-          input {
-            display: none;
-            &:not(:checked) ~ label:hover,
-            &:not(:checked) ~ label:hover ~ label {
-              color: rgb(216, 96, 96);
-            }
-            &:checked ~ label {
-              color: rgb(216, 96, 96);
-            }
-            &#liked:checked ~ label {
-              color: rgb(216, 96, 96);
-              text-shadow: 0 0 5px $primary;
-            }
-          }
-          label {
-            font-size: 70px;
-            color: #444;
-            transition: all 0.2s ease;
-          }
-        }
-      }
-    }
     .ReviewsHeaderRight {
       padding-left: 50px;
       width: 100%;
       .starRatingForm {
+        .fillLeft {
+          display: flex;
+        }
         .starRating {
           justify-content: center;
           text-align: center;
-          padding: 20px 30px;
-          margin: 0 200px 30px 0;
           input {
             display: none;
             &:not(:checked) ~ label:hover,
