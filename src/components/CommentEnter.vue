@@ -1,4 +1,42 @@
 <template>
+  <div
+    class="modal-show"
+    tabindex="-1"
+    v-show="delete_show">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            댓글 삭제
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            @click="changeModalStatus"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>댓글을 삭제하시겠습니까?</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            @click="changeModalStatus"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">
+            취소
+          </button>
+          <button
+            type="button"
+            @click="commentDelete"
+            class="btn btn-primary">
+            삭제
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="container">
     <div class="commentListWrapper">
       <ul class="commentBoxWrapper">
@@ -31,7 +69,7 @@
                 <span @click="changeEdit">수정</span>
               </div>
               <div class="commentDelete">
-                <span @click="commentDelete">삭제</span>
+                <span @click="changeModalStatus">삭제</span>
               </div>
             </div>
             <div
@@ -56,6 +94,7 @@ export default {
   data() {
     return {
       edit: true,
+      delete_show: false,
       userComment: [
 
       ]
@@ -74,6 +113,9 @@ export default {
     changeEdit() {
       this.edit = false
     },
+    changeModalStatus() {
+      this.delete_show = !this.delete_show
+    },
     async commentFix() {
       this.$store.dispatch('commentService/fixComment', {
         id: this.$route.params.id,
@@ -85,10 +127,11 @@ export default {
       console.log(this.edit)
     },
     async commentDelete() {
-      this.$store.commit('commentService/deleteComment', {
+        this.$store.commit('commentService/deleteComment', {
         id: this.$route.params.id,
         commentId: this.comment.commentId
-      })
+        })
+      this.$router.go(this.$router.currentRoute)
     }
   }
 }
@@ -96,7 +139,18 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/scss/main";
+.modal-show {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    outline: 0;
+    z-index: 1055;
+}
 .container {
+  overflow: hidden;
   width: 100%;
   .commentListWrapper {
     border-top: 1px solid #ebebeb;

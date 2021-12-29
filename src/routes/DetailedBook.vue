@@ -87,14 +87,24 @@ export default {
       }
     },
     bookLiked() {
+      if(this.$store.state.loginService.UserInfoObj.id === '') {
+        alert('로그인 후 이용할 수 있습니다.')
+        return
+      }
       this.$store.dispatch('commentService/postHeart', {
         id: this.$route.params.id
       })
+      this.$router.go(this.$router.currentRoute)
     },
     bookLikedCancle() {
+      if(this.$store.state.loginService.UserInfoObj.id === '') {
+        alert('로그인 후 이용할 수 있습니다.')
+        return
+      }
       this.$store.dispatch('commentService/deleteHeart', {
         id: this.$route.params.id
       })
+      this.$router.go(this.$router.currentRoute)
     }
   }
 }

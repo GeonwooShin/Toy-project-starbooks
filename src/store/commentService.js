@@ -6,36 +6,12 @@ export default {
     comment:'',
     starRate: '',
     commentList: [],
-    likedList: [] 
+    likedList: []
   }),
   getters: {
 
   },
   mutations: {
-    postComment(state, payload) {
-      const {id} = payload
-      axios.post(`http://13.209.146.204:8080/api/books/${id}/comments`, {
-        comment: this.state.comment,
-        starRate: this.state.starRate
-      }, {
-        headers: {
-          Authorization: `Bearer ` + localStorage.getItem('user-token')
-        }
-      })
-      .then((res) => {
-        console.log(res)
-        this.state.comment = ''
-        this.state.starRate = ''
-      })
-      .catch((err) => {
-        alert('댓글은 한 책당 한 번만 작성할 수 있습니다.')
-        console.log(err)
-        this.state.comment = ''
-        this.state.starRate = ''
-      })
-      console.log(state.comment)
-      console.log(state.starRate)
-    },
     fixComment(state, payload) {
       const {id, commentId, comment, starRate} = payload
       axios.put(`http://13.209.146.204:8080/api/books/${id}/comments/${commentId}`, {
@@ -100,6 +76,9 @@ export default {
         console.log(err)
       })
     },
+    pushComment(state, payload) {
+      state.commentList.unshift(payload)
+    },
     commentUpdate(state, payload) {
       Object.keys(payload).forEach(key => {
         state[key] = payload[key]
@@ -107,6 +86,33 @@ export default {
     }
   },
   actions: {
+    postComment(state, payload) {
+      const {id} = payload
+      axios.post(`http://13.209.146.204:8080/api/books/${id}/comments`, {
+        comment: this.state.comment,
+        starRate: this.state.starRate
+      }, {
+        headers: {
+          Authorization: `Bearer ` + localStorage.getItem('user-token')
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        this.state.comment = ''
+        this.state.starRate = ''
+      })
+      .catch((err) => {
+        if(err.response.data.code == "E0001") {
+          alert('별점과 함께 입력해주세요!')
+        }
+        if(err.response.data.code == "E0010") {
+          alert('댓글은 한 책당 한 번만 작성할 수 있습니다.')
+        }
+        console.log(err.response)
+        this.state.comment = ''
+        this.state.starRate = ''
+      })
+    },
     async getComment({commit}, payload) {
       const {id} = payload
       axios.get(`http://13.209.146.204:8080/api/books/${id}/comments`)
@@ -144,9 +150,6 @@ export default {
           likedList: {}
         })
       })
-    },
-    async postComment({ commit }, payload) {
-      return await commit('postComment', payload)
     },
     async fixComment({commit}, payload) {
       return await commit('fixComment', payload)

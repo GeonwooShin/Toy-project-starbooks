@@ -115,14 +115,20 @@ export default {
       if(this.$store.state.loginService.UserInfoObj.id === '') {
         alert('로그인 후 이용할 수 있습니다.')
         return
+      } else if(this.$store.state.commentService.comment.count < 10) {
+        alert('최대 10자 이상의 코멘트를 입력해주세요.')
+        return
+      } else if(this.$store.state.commentService.starRate === '') {
+        alert('별점과 함께 입력해주세요.')
+        return
       }
       this.$store.dispatch('commentService/postComment', {
         id: this.$route.params.id,
         comment: this.$store.state.comment,
         starRate: this.$store.state.starRate
-      })
-      console.log(this.$store.state.comment)
-      console.log(this.$store.state.commentList)
+      })      
+      this.$router.go(this.$router.currentRoute)
+      console.log(this.$store.state.commentService.commentList)
     }
   },
   async created() {
