@@ -1,9 +1,29 @@
 <template>
   <div class="container">
     <div class="inner">
-      <div
-        class="book-poster"
-        :style="{backgroundImage: `url(${requestDiffSizeImage(theBook.imgUrl)})`}">
+      <div class="book-poster-likey">
+        <div
+          class="book-poster"
+          :style="{backgroundImage: `url(${requestDiffSizeImage(theBook.imgUrl)})`}">
+        </div>
+        <div
+          class="book-liked">
+          <div class="book-liked-container">
+            <input
+              value="true"
+              @click="LikedOrCancle()"
+              type="checkbox"
+              name="like"
+              id="liked" />
+            <label
+              :class="{ active: theLiked.check === true }"
+              for="liked"
+              class="fas fa-heart"></label>  
+            <div class="likedNum">
+              {{ theLiked.heartCount }}
+            </div>
+          </div>
+        </div>
       </div>
       <div class="book-detailed">
         <p class="book-title">
@@ -24,18 +44,26 @@
       </div>
     </div>
   </div>
-  <Comment />
+  <CommentBox />
 </template>
 
 <script>
-import Comment from '~/components/Comment'
+import CommentBox from '~/components/CommentBox'
 export default {
+  data() {
+    return {
+      
+    }
+  },
   components: {
-    Comment
+    CommentBox
   },
   computed: {
     theBook() {
       return this.$store.state.book.theBook
+    },
+    theLiked() {
+      return this.$store.state.commentService.likedList
     }
   },
   created() {
@@ -43,10 +71,40 @@ export default {
     this.$store.dispatch('book/searchBookWithId', {
       id: this.$route.params.id
     })
+    this.$store.dispatch('commentService/getHeart', {
+      id: this.$route.params.id
+    })
   },
   methods: {
-   requestDiffSizeImage(url, imgSize = "xxlarge") {
+    requestDiffSizeImage(url, imgSize = "xxlarge") {
       return url.replace('large', `${imgSize}`)
+    },
+    LikedOrCancle() {
+      if(this.$store.state.commentService.likedList.check === false) {
+        this.bookLiked()
+      } else {
+        this.bookLikedCancle()
+      }
+    },
+    bookLiked() {
+      if(this.$store.state.loginService.UserInfoObj.id === '') {
+        alert('로그인 후 이용할 수 있습니다.')
+        return
+      }
+      this.$store.dispatch('commentService/postHeart', {
+        id: this.$route.params.id
+      })
+      this.$router.go(this.$router.currentRoute)
+    },
+    bookLikedCancle() {
+      if(this.$store.state.loginService.UserInfoObj.id === '') {
+        alert('로그인 후 이용할 수 있습니다.')
+        return
+      }
+      this.$store.dispatch('commentService/deleteHeart', {
+        id: this.$route.params.id
+      })
+      this.$router.go(this.$router.currentRoute)
     }
   }
 }
@@ -62,7 +120,8 @@ export default {
     border-top: solid 1px #ebebeb;
     display: flex;
     height: 430px;
-    .book-poster {
+    .book-poster-likey {
+      .book-poster {
       $width: 230px;
       width: $width;
       height: $width * 3 / 2;
@@ -71,6 +130,45 @@ export default {
       overflow: hidden;
       background-position: center center;
       border: 1px solid #ebebeb;
+      }
+      .book-liked {
+        padding-top: 20px;
+        margin-left: 25px;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        .book-liked-container {
+          border-color: #9c9c9c;
+          display: block;
+          margin-right: auto;
+          margin-left: auto;
+          width: 65px;
+          height: 65px;
+          background: #efefef;
+          border-radius: 50%;
+          input {
+            display: none;
+          }
+          label {
+            color: #9c9c9c;
+            padding-top: 15px;
+            font-size: 50px;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            font-size: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+          }
+          .likedNum {
+            font-weight: 700;
+            color: #9c9c9c;
+          }
+          .active {
+            color: #ff7868;
+          }
+        }
+      }
     }
     .book-detailed {
       width: 70%;

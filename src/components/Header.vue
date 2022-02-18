@@ -23,11 +23,14 @@
               도서검색
             </RouterLink>
           </li>
-        </ul>
-        <ul class="navbar_menu">
           <li class="navbar_item">
+            <span
+              class="nav-link welcome-user"
+              v-if="$store.state.loginService.isLogin === true">
+              {{ $store.state.loginService.UserInfoObj.id }}님 반갑습니다!
+            </span>
             <RouterLink
-              v-if="$store.state.isLogin === false"
+              v-if="$store.state.loginService.isLogin === false"
               to="/Login"
               active-class="active"
               class="nav-link">
@@ -44,7 +47,7 @@
           </li>
           <li class="navbar_item">
             <RouterLink
-              v-if="$store.state.isLogin === false"
+              v-if="$store.state.loginService.isLogin === false"
               to="/Join"
               active-class="active"
               class="nav-link">
@@ -116,9 +119,19 @@ header {
         display: flex;
         align-items: center;
         margin: 0;
-        .active {
-          font-weight: bold;
-          font-size: 17px;
+        font-size: 15px;
+        
+        .navbar_item {
+          display: flex;
+          .welcome-user {
+            color: $yellow;
+            font-size: 15px;
+            font-weight: 800;
+            &:hover {
+              background-color: $primary;
+              color: $yellow;
+            }
+          }
         }
         .nav-link {
           align-items: center;

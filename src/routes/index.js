@@ -28,6 +28,6 @@ export default createRouter({
     {
       path: '/Join',
       component: Join
-    }    
+    }
   ]
 })
