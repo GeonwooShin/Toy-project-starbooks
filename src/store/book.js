@@ -52,7 +52,99 @@ export default {
           theBook: {}
         })
       }
-    }
+    },
+    
+        //--------------!!!!!homeBooks Aggro Start!!!!!-----------------
+        async homeBooks1({ commit }, payload) {
+          try {
+            const res = await _fetchBooks(payload)
+            // const { content } = res.data
+            commit('updateState', {
+              homeBooks1: res.data
+            })
+          } catch(error) {
+            commit('updateState', {
+              homeBooks1: {}
+            })
+          }
+        },
+        async homeBooks2({ commit }, payload) {
+          try {
+            const res = await _fetchBooks(payload)
+            // const { content } = res.data
+            commit('updateState', {
+              homeBooks2: res.data
+            })
+          } catch(error) {
+            commit('updateState', {
+              homeBooks2: {}
+            })
+          }
+        },
+        async homeBooks3({ commit }, payload) {
+          try {
+            const res = await _fetchBooks(payload)
+            // const { content } = res.data
+            commit('updateState', {
+              homeBooks3: res.data
+            })
+          } catch(error) {
+            commit('updateState', {
+              homeBooks3: {}
+            })
+          }
+        },
+        async homeBooks4({ commit }, payload) {
+          try {
+            const res = await _fetchBooks(payload)
+            // const { content } = res.data
+            commit('updateState', {
+              homeBooks4: res.data
+            })
+          } catch(error) {
+            commit('updateState', {
+              homeBooks4: {}
+            })
+          }
+        },
+        async homeBooks5({ commit }, payload) {
+          try {
+            const res = await _fetchBooks(payload)
+            // const { content } = res.data
+            commit('updateState', {
+              homeBooks5: res.data
+            })
+          } catch(error) {
+            commit('updateState', {
+              homeBooks5: {}
+            })
+          }
+        },
+        async searchHomeBooksIdStar({ commit }, payload) {
+          console.log('123123')
+          const res = await _fetchBooks({
+            ...payload
+          })
+          console.log(res)
+          const { content, totalPages } = res.data
+          commit('updateState', {
+            searchHomeBooksIdStar: content,
+            totalpage: totalPages
+          })
+        },
+        async searchHomeBooksIdHot({ commit }, payload) {
+          console.log('123123')
+          const res = await _fetchBooks({
+            ...payload
+          })
+          console.log(res)
+          const { content, totalPages } = res.data
+          commit('updateState', {
+            searchHomeBooksIdHot: content,
+            totalpage: totalPages
+          })
+        }
+        //--------------!!!!!!homeBooks Aggro End!!!!!!!-----------------
   }
 }
 
